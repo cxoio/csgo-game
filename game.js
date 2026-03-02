@@ -1,88 +1,163 @@
-// game.js
+// game.js - Main Game Loop and Initialization
 
-// Import necessary libraries and initialize variables
-import * as THREE from 'three';
+let scene, camera, renderer, player, inputController, gameState, dust2Map;
+let lastTime = Date.now();
 
-let scene, camera, renderer, player, controls;
-
-// Game state
-let isGameActive = false;
-
-// Function to initialize the Three.js scene
 function init() {
-    // Create scene
-    scene = new THREE.Scene();
+    try {
+        // Initialize Three.js Scene
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xcccccc);
 
-    // Setup camera
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 5;
+        // Initialize Camera
+        const canvas = document.getElementById('gameCanvas');
+        camera = new THREE.PerspectiveCamera(
+            75,
+            canvas.clientWidth / canvas.clientHeight,
+            0.1,
+            2000
+        );
+        camera.position.set(0, 5, 0);
 
-    // Setup renderer
-    renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-
-    // Initialize player
-    player = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0x00ff00 }));
-    scene.add(player);
-
-    // Controls
-    controls = new THREE.PointerLockControls(camera, document.body);
-    document.body.appendChild(controls.domElement);
-    document.addEventListener('click', () => { controls.lock(); });
-
-    loadMap();
-    animate();
-}
-
-// Load de_dust2 map geometry (stub example)
-function loadMap() {
-    // Geometry creation (this should be the complete de_dust2 layout)
-    const geometry = new THREE.BoxGeometry(10, 1, 10);
-    const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-    const floor = new THREE.Mesh(geometry, material);
-    scene.add(floor);
-
-    // Add more geometry for the map here...
-}
-
-// Handle player movement
-function handleMovement() {
-    // Example movement logic
-    const speed = 0.1;
-    if (controls.isLocked) {
-        document.addEventListener('keydown', (event) => {
-            switch (event.code) {
-                case 'KeyW': // Forward
-                    player.position.z -= speed;
-                    break;
-                case 'KeyS': // Backward
-                    player.position.z += speed;
-                    break;
-                case 'KeyA': // Left
-                    player.position.x -= speed;
-                    break;
-                case 'KeyD': // Right
-                    player.position.x += speed;
-                    break;
-            }
+        // Initialize Renderer
+        renderer = new THREE.WebGLRenderer({ 
+            canvas: canvas, 
+            antialias: true 
         });
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        renderer.shadowMap.enabled = true;
+
+        // Create Player
+        const playerGeometry = new THREE.CapsuleGeometry(0.5, 1.8, 4, 8);
+        const playerMaterial = new THREE.MeshLambertMaterial({ color: 0x4169E1 });
+        player = new THREE.Mesh(playerGeometry, playerMaterial);
+        player.position.set(90, 2, 0);
+        player.castShadow = true;
+
+        camera.position.copy(player.position);
+        camera.position.y += 1.6;
+
+        // Initialize Game State
+        gameState = new GameState();
+        
+        // Initialize Input Controller
+        inputController = new InputController(camera, player);
+
+        // Setup Menu Event Listeners
+        setupMenuListeners();
+
+        window.addEventListener('resize', onWindowResize);
+
+        console.log('Game initialized successfully');
+    } catch (error) {
+        console.error('Initialization error:', error);
     }
 }
 
-// Animate the scene
+function setupMenuListeners() {
+    try {
+        document.getElementById('playBtn').addEventListener('click', () => {
+            gameState.startGame();
+        });
+
+        document.getElementById('terroristBtn').addEventListener('click', () => {
+            gameState.selectTeam('terrorist');
+            startGameLoop();
+        });
+
+        document.getElementById('ctBtn').addEventListener('click', () => {
+            gameState.selectTeam('counter-terrorist');
+            startGameLoop();
+        });
+
+        document.getElementById('settingsBtn').addEventListener('click', () => {
+            alert('Settings menu coming soon!');
+        });
+
+        document.getElementById('aboutBtn').addEventListener('click', () => {
+            alert('CS:GO 3D Game - de_dust2 Map\nVersion 1.0\nCreated with Three.js');
+        });
+    } catch (error) {
+        console.error('Menu setup error:', error);
+    }
+}
+
+function startGameLoop() {
+    try {
+        dust2Map = new Dust2Map(scene);
+        
+        if (gameState.playerTeam === 'terrorist') {
+            player.position.set(-90, 2, 0);
+        } else {
+            player.position.set(90, 2, 0);
+        }
+
+        camera.position.copy(player.position);
+        camera.position.y += 1.6;
+
+        scene.add(player);
+
+        animate();
+    } catch (error) {
+        console.error('Game loop error:', error);
+    }
+}
+
 function animate() {
-    requestAnimationFrame(animate);
-    handleMovement();
-    renderer.render(scene, camera);
+    try {
+        requestAnimationFrame(animate);
+
+        const currentTime = Date.now();
+        const deltaTime = (currentTime - lastTime) / 1000;
+        lastTime = currentTime;
+
+        gameState.update(deltaTime);
+
+        if (inputController) {
+            inputController.update();
+        }
+
+        const targetCameraPos = new THREE.Vector3(
+            player.position.x,
+            player.position.y + 1.6,
+            player.position.z
+        );
+        camera.position.lerp(targetCameraPos, 0.1);
+
+        if (gameState.bots) {
+            gameState.bots.forEach(bot => {
+                bot.decideAction();
+            });
+        }
+
+        renderer.render(scene, camera);
+    } catch (error) {
+        console.error('Animation loop error:', error);
+    }
 }
 
-// Trigger game start
-function startGame() {
-    isGameActive = true;
-    init();
+function onWindowResize() {
+    try {
+        const canvas = document.getElementById('gameCanvas');
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
+
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+    } catch (error) {
+        console.error('Resize error:', error);
+    }
 }
 
-startGame();
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        init();
+    } catch (error) {
+        console.error('DOMContentLoaded error:', error);
+    }
+});
 
-// Add weapon mechanics, collision detection, and game state management based on your requirements.
+window.addEventListener('error', (event) => {
+    console.error('Global error:', event.error);
+});

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS:GO 3D Game</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+        /* Professional interface styling */
+    </style>
+</head>
+<body>
+    <div id="menu">
+        <h1>CS:GO 3D Game</h1>
+        <button id="start-game">Start Game</button>
+        <button id="options">Options</button>
+        <button id="exit">Exit</button>
+    </div>
+    <script src="https://threejs.org/build/three.js"></script>
+    <script>
+        // Basic Three.js setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        
+        // Placeholder for "de_dust2" map layout
+        // TODO: Implement map layout
+
+        // Control Variables
+        const keys = { W: false, A: false, S: false, D: false };
+        
+        document.addEventListener('keydown', (event) => {
+            if (event.key in keys) keys[event.key] = true;
+        });
+
+        document.addEventListener('keyup', (event) => {
+            if (event.key in keys) keys[event.key] = false;
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Movement logic based on keys
+            if (keys.W) { /* Move forward */ }
+            if (keys.A) { /* Move left */ }
+            if (keys.S) { /* Move backward */ }
+            if (keys.D) { /* Move right */ }
+            
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // AI Logic Placeholder
+        // TODO: Implement AI functionality
+
+        // Error Handling Example
+        try {
+            // Game initializations
+        } catch (error) {
+            console.error('An error occurred:', error);
+        }
+
+    </script>
+</body>
+</html>

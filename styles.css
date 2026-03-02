@@ -1,0 +1,52 @@
+.menu {
+    background-color: #1c1c1c; /* Dark background for the menu */
+    color: #ffffff; /* White text color */
+    font-family: 'Arial', sans-serif;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.hud {
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+    color: #00ff00; /* Green text color typical for HUDs */
+    font-size: 14px;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    border: 2px solid #00ff00; /* Green border */
+    border-radius: 5px;
+}
+
+.stats-display {
+    background-color: #2a2a2a; /* Darker section for stats display */
+    color: #ffffff;
+    border: 1px solid #00ff00;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 10px;
+}
+
+.crosshair {
+    background-color: transparent;
+    border: 2px solid #00ff00; /* Green crosshair */
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    /* Centering positioning can be adjusted dynamically with JS */
+}
+
+.weapon-selection {
+    background-color: #1c1c1c;
+    color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .menu, .hud, .stats-display, .weapon-selection {
+        font-size: 12px;
+        padding: 15px;
+    }
+}

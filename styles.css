@@ -1,52 +1,268 @@
-.menu {
-    background-color: #1c1c1c; /* Dark background for the menu */
-    color: #ffffff; /* White text color */
+/* styles.css - Professional CS:GO Game Styling */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
     font-family: 'Arial', sans-serif;
-    padding: 20px;
-    border-radius: 5px;
-}
-
-.hud {
-    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
-    color: #00ff00; /* Green text color typical for HUDs */
-    font-size: 14px;
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    padding: 10px;
-    border: 2px solid #00ff00; /* Green border */
-    border-radius: 5px;
-}
-
-.stats-display {
-    background-color: #2a2a2a; /* Darker section for stats display */
+    background: linear-gradient(135deg, #1c1c1c 0%, #2d2d2d 100%);
     color: #ffffff;
-    border: 1px solid #00ff00;
+    overflow: hidden;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* ===== MENU STYLING ===== */
+
+.menu-container {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.menu-content {
+    text-align: center;
+    background: rgba(30, 30, 30, 0.95);
+    padding: 60px 80px;
+    border: 3px solid #FFD700;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+}
+
+.menu-content h1 {
+    font-size: 48px;
+    color: #FFD700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+.menu-content p {
+    font-size: 20px;
+    color: #cccccc;
+    margin-bottom: 40px;
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.btn {
+    padding: 15px 40px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
     border-radius: 5px;
-    padding: 15px;
-    margin: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #000000;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+}
+
+.btn-secondary {
+    background: rgba(100, 100, 100, 0.8);
+    color: #ffffff;
+    border: 2px solid #FFD700;
+}
+
+.btn-secondary:hover {
+    background: rgba(150, 150, 150, 0.9);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+}
+
+/* ===== TEAM SELECTION ===== */
+
+.team-selection {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.team-content {
+    text-align: center;
+}
+
+.team-content h2 {
+    font-size: 36px;
+    color: #FFD700;
+    margin-bottom: 40px;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+}
+
+.team-options {
+    display: flex;
+    gap: 60px;
+    justify-content: center;
+}
+
+.team-btn {
+    padding: 40px 60px;
+    border: 3px solid;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.team-btn h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.team-btn p {
+    font-size: 14px;
+    margin-top: 10px;
+    opacity: 0.8;
+}
+
+.terrorist {
+    background: rgba(139, 0, 0, 0.3);
+    border-color: #FF4500;
+    color: #FF6347;
+}
+
+.terrorist:hover {
+    background: rgba(139, 0, 0, 0.5);
+    box-shadow: 0 0 20px rgba(255, 69, 0, 0.8);
+    transform: scale(1.05);
+}
+
+.counter-terrorist {
+    background: rgba(0, 51, 102, 0.3);
+    border-color: #1E90FF;
+    color: #4169E1;
+}
+
+.counter-terrorist:hover {
+    background: rgba(0, 51, 102, 0.5);
+    box-shadow: 0 0 20px rgba(30, 144, 255, 0.8);
+    transform: scale(1.05);
+}
+
+/* ===== IN-GAME HUD ===== */
+
+.hud-top {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 50px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px 30px;
+    border: 2px solid #FFD700;
+    border-radius: 5px;
+    z-index: 100;
+}
+
+.hud-team, .hud-round, .hud-time {
+    font-size: 16px;
+    font-weight: bold;
+    color: #00FF00;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.8);
+}
+
+.hud-bottom {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #00FF00;
+    border-radius: 5px;
+    padding: 15px 20px;
+    z-index: 100;
+}
+
+.weapon-info, .health-info, .money-info {
+    color: #00FF00;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 5px 0;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.6);
 }
 
 .crosshair {
-    background-color: transparent;
-    border: 2px solid #00ff00; /* Green crosshair */
-    width: 10px;
-    height: 10px;
-    position: absolute;
-    /* Centering positioning can be adjusted dynamically with JS */
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid #00FF00;
+    border-radius: 50%;
+    z-index: 200;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
 }
 
-.weapon-selection {
-    background-color: #1c1c1c;
-    color: #ffffff;
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
+.controls-info {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #FFD700;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 12px;
+    color: #FFD700;
+    z-index: 100;
 }
 
-@media screen and (max-width: 768px) {
-    .menu, .hud, .stats-display, .weapon-selection {
-        font-size: 12px;
-        padding: 15px;
+@media (max-width: 768px) {
+    .menu-content {
+        padding: 40px 50px;
+    }
+
+    .menu-content h1 {
+        font-size: 32px;
+    }
+
+    .team-options {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .team-btn {
+        padding: 30px 40px;
+    }
+
+    .hud-top {
+        gap: 20px;
+        padding: 10px 15px;
+    }
+
+    .controls-info {
+        font-size: 10px;
     }
 }

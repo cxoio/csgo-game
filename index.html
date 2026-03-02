@@ -3,67 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CS:GO 3D Game</title>
-    <style>
-        body { margin: 0; }
-        canvas { display: block; }
-        /* Professional interface styling */
-    </style>
+    <title>CS:GO 3D Game - de_dust2</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="menu">
-        <h1>CS:GO 3D Game</h1>
-        <button id="start-game">Start Game</button>
-        <button id="options">Options</button>
-        <button id="exit">Exit</button>
-    </div>
-    <script src="https://threejs.org/build/three.js"></script>
-    <script>
-        // Basic Three.js setup
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
-        
-        // Placeholder for "de_dust2" map layout
-        // TODO: Implement map layout
-
-        // Control Variables
-        const keys = { W: false, A: false, S: false, D: false };
-        
-        document.addEventListener('keydown', (event) => {
-            if (event.key in keys) keys[event.key] = true;
-        });
-
-        document.addEventListener('keyup', (event) => {
-            if (event.key in keys) keys[event.key] = false;
-        });
-
-        function animate() {
-            requestAnimationFrame(animate);
-
-            // Movement logic based on keys
-            if (keys.W) { /* Move forward */ }
-            if (keys.A) { /* Move left */ }
-            if (keys.S) { /* Move backward */ }
-            if (keys.D) { /* Move right */ }
+    <!-- Game Menu -->
+    <div id="mainMenu" class="menu-container">
+        <div class="menu-content">
+            <h1>COUNTER-STRIKE: GLOBAL OFFENSIVE</h1>
+            <p>de_dust2 - 3D Edition</p>
             
-            renderer.render(scene, camera);
-        }
+            <div class="menu-buttons">
+                <button id="playBtn" class="btn btn-primary">PLAY</button>
+                <button id="settingsBtn" class="btn btn-secondary">SETTINGS</button>
+                <button id="aboutBtn" class="btn btn-secondary">ABOUT</button>
+            </div>
+        </div>
+    </div>
 
-        animate();
+    <!-- Team Selection Menu -->
+    <div id="teamMenu" class="team-selection" style="display:none;">
+        <div class="team-content">
+            <h2>SELECT YOUR TEAM</h2>
+            <div class="team-options">
+                <button id="terroristBtn" class="team-btn terrorist">
+                    <h3>TERRORISTS</h3>
+                    <p>Plant the bomb at A or B</p>
+                </button>
+                <button id="ctBtn" class="team-btn counter-terrorist">
+                    <h3>COUNTER-TERRORISTS</h3>
+                    <p>Defend the bomb sites</p>
+                </button>
+            </div>
+        </div>
+    </div>
 
-        // AI Logic Placeholder
-        // TODO: Implement AI functionality
+    <!-- In-Game HUD -->
+    <div id="gameHUD" style="display:none;">
+        <div id="topHUD" class="hud-top">
+            <div class="hud-team">TEAM: <span id="teamDisplay"></span></div>
+            <div class="hud-round">ROUND: <span id="roundDisplay">1</span></div>
+            <div class="hud-time">TIME: <span id="timeDisplay">00:00</span></div>
+        </div>
 
-        // Error Handling Example
-        try {
-            // Game initializations
-        } catch (error) {
-            console.error('An error occurred:', error);
-        }
+        <div id="bottomHUD" class="hud-bottom">
+            <div class="weapon-info">
+                <p>Weapon: <span id="currentWeapon">Glock</span></p>
+                <p>Ammo: <span id="ammoCount">20/120</span></p>
+            </div>
+            <div class="health-info">
+                <p>HP: <span id="healthDisplay">100</span></p>
+                <p>Armor: <span id="armorDisplay">0</span></p>
+            </div>
+            <div class="money-info">
+                <p>Money: $<span id="moneyDisplay">2400</span></p>
+            </div>
+        </div>
 
-    </script>
+        <div id="crosshair" class="crosshair"></div>
+    </div>
+
+    <!-- Canvas for 3D rendering -->
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Controls info -->
+    <div id="controlsInfo" class="controls-info">
+        <p>WASD - Move | Mouse - Look | LMB - Shoot | RMB - Aim | E - Interact | R - Reload</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="map.js"></script>
+    <script src="weapons.js"></script>
+    <script src="ai.js"></script>
+    <script src="input.js"></script>
+    <script src="gameState.js"></script>
+    <script src="game.js"></script>
 </body>
 </html>
